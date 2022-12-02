@@ -8,53 +8,8 @@ export default class PingCommand {
 
   constructor() {
     this.data = {
-      name: 'lojinha',
-      description: 'Ver os produtos disponiveis na lojinha da STAFF',
-      options: [
-        {
-          name: 'produto',
-          type: ApplicationCommandOptionType.String,
-          description: 'Escolher um produto pra comprar',
-          choices: [
-            {
-              name: 'Cubos',
-              value: 'cubos'
-            },
-            {
-              name: 'Gift Card',
-              value: 'giftcard'
-            },
-            {
-              name: 'Discord Nitro',
-              value: 'nitro'
-            },
-            {
-              name: 'IFood',
-              value: 'ifood'
-            },
-            {
-              name: 'Especial',
-              value: 'especial'
-            },
-            {
-              name: 'Staff Cubeiro',
-              value: 'staffcubeiro'
-            },
-            {
-              name: 'Medalha Maratona',
-              value: 'maratona'
-            },
-            {
-              name: 'TAG Craftlandiano',
-              value: 'craftlandiano'
-            }, 
-            {
-              name: 'TAG Ostentador',
-              value: 'ostentador'
-            }
-          ]
-        }
-      ]
+      name: 'ping',
+      description: 'teste'
     }
   }
 
