@@ -13,9 +13,9 @@
     "discord",
     "bot",
     "template",
-    "typescript"
+    "typescript",
+    "v14"
   ],
-  "author": "Tiago Ryan",
   "license": "MIT",
   "dependencies": {
     "colors": "^1.4.0",
