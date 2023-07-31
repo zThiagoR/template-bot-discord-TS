@@ -1,7 +1,7 @@
 import { yellow, gray } from "colors";
 import { ActivityType, Client } from "discord.js";
 
-import deployCommand from '../Commands/BaseCommands'
+import Deploy from '../Commands/BaseCommands'
 
 export default class ReadyApplication {
   type: string;
@@ -13,11 +13,11 @@ export default class ReadyApplication {
   async execute(client: Client<true>) {
 
     client.user.setActivity({
-      name: "💰 | /daily",
+      name: "🚀 | Iniciando...",
       type: ActivityType.Playing
     })
 
-    await deployCommand(client);
+    new Deploy().PushCommand(client);
 
     console.log(yellow("[CLIENT]") + " Aplicação " + gray(client.user.tag) + " Iniciada com Sucesso");
   };
