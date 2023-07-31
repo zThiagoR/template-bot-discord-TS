@@ -1,4 +1,4 @@
-import { Client, Collection, Interaction } from 'discord.js';
+import { ChatInputCommandInteraction, Client } from 'discord.js';
 
 export default class InteractionExecute {
   type: string;
@@ -7,36 +7,32 @@ export default class InteractionExecute {
     this.type = 'interactionCreate';
   }
 
-  async execute(client: Client<true>, int: Interaction) {
+  async execute(client: Client<true>, int: ChatInputCommandInteraction) {
     if (int.isCommand()) {
       const command = client.slashCommands.get(int.commandName);
       if (!command) return;
 
       await int.deferReply({ ephemeral: command.defer });
 
-      if (!client.cooldowns.has(command.data.name)) {
-        client.cooldowns.set(command.data.name, new Collection());
-      }
-
-      const now = Date.now();
-      const timestamps = client.cooldowns.get(command.data.name);
-      const cooldownAmount = (command.cooldown || 3) * 1000;
-
-      if (timestamps.has(int.user.id)) {
-        const expirationTime = timestamps.get(int.user.id) + cooldownAmount;
-
+      const time = (command.cooldown || 5) * 1000;
+      if (client.cooldowns.has(`${command.data}-${int.user.id}`)) {
+        const now = Date.now();
+        const expirationTime = client.cooldowns.get(`${command.data.name}-${int.user.id}`);
+        
         if (now < expirationTime) {
           const timeLeft = (expirationTime - now) / 1000;
           
           return int.editReply({
             content: `${int.user}`,
             embeds: [{
-              color: 0xff0000, author: { name: 'Calma ai!', icon_url: client.user.displayAvatarURL() },
+              color: 0xf33f, author: { name: 'Calma ai!', icon_url: client.user.displayAvatarURL() },
               description: `⏱ **|** Você precisa esperar **${timeLeft.toFixed(1)} Segundo(s)** para executar o comando \`${command.data.name}\` novamente!`
             }]
           });
         }
       }
+
+      client.cooldowns.set(`${command.data.name}-${int.user.id}`, Date.now() + time);
 
       try {
         command.execute(client, int);
@@ -52,12 +48,6 @@ export default class InteractionExecute {
           }]
         });
       } 
-    }
-
-    if (int.isSelectMenu()) {
-    }
-
-    if (int.isButton()) {
     }
   }
 }
