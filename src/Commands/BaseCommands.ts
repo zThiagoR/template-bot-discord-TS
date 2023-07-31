@@ -4,24 +4,28 @@ import { resolve } from 'path';
 
 import { SlashCommand } from "../@types/TypeCommands";
 
-export default async (client: Client<true>) => {
-  const guild = client.guilds.cache.get('960355993798193163');
+export default class BaseCommand {
 
-  const SlashFolder = readdirSync('./src/Commands').filter((file) => file !== 'BaseCommands.ts');
-  for (const SlashDir of SlashFolder) {
+  protected data: ApplicationCommandDataResolvable;
+  protected cooldown?: number;
+  protected defer?: boolean;
 
-    const SlashFile = readdirSync(resolve('./src/Commands', SlashDir));
-    for (const SlashCommand of SlashFile) {
+  async PushCommand(client: Client<true>) {
+    const SlashFolder = readdirSync(resolve(__dirname, "SlashCommands"));
+    
+    for (const dirs of SlashFolder) {
+      const SlashCommand = readdirSync(resolve(__dirname, "SlashCommands", dirs))
+        .filter((file) => file.endsWith('.ts'));
 
-      const CommandFile = await import(resolve('./src/Commands', SlashDir, SlashCommand));
-      const Command: SlashCommand = new CommandFile.default();
+      for (const file of SlashCommand) {
+        const CommandFile = await import(resolve(__dirname, "SlashCommands", dirs, file));
+        const command: SlashCommand = new CommandFile.default();
 
-      client.slashCommands.set(Command.data.name, Command);
+        client.slashCommands.set(command.data.name, command);
+        console.log(`[CLIENT] Comando ${command.data.name} adicionado com Sucesso`);
+      }
     }
-  }
-  
-  const Data = client.slashCommands.map(({ data }) => data);
-  await guild.commands.set(Data);
 
-  return console.log('[CLIENT] Commands on ready!');
+    client.guilds.cache.forEach((Guild) => Guild.commands.set(client.slashCommands.map((cmd) => cmd.data)));
+  }
 }
