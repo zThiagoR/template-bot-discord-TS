@@ -15,9 +15,9 @@ export default class InteractionExecute {
       await int.deferReply({ ephemeral: command.defer });
 
       const time = (command.cooldown || 5) * 1000;
-      if (client.cooldowns.has(`${command.data}-${int.user.id}`)) {
+      if (client.cooldownsSlash.has(`${command.data}-${int.user.id}`)) {
         const now = Date.now();
-        const expirationTime = client.cooldowns.get(`${command.data.name}-${int.user.id}`);
+        const expirationTime = client.cooldownsSlash.get(`${command.data.name}-${int.user.id}`);
         
         if (now < expirationTime) {
           const timeLeft = (expirationTime - now) / 1000;
@@ -32,7 +32,7 @@ export default class InteractionExecute {
         }
       }
 
-      client.cooldowns.set(`${command.data.name}-${int.user.id}`, Date.now() + time);
+      client.cooldownsSlash.set(`${command.data.name}-${int.user.id}`, Date.now() + time);
 
       try {
         command.execute(client, int);
