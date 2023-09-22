@@ -9,8 +9,10 @@ export default class ClientApplication {
 
   constructor() {
     this.client = new Discord.Client(ApplicationConfig);
-    this.client.cooldowns = new Discord.Collection();
+    this.client.cooldownsNormal = new Discord.Collection();
+    this.client.cooldownsSlash = new Discord.Collection();
     this.client.slashCommands = new Discord.Collection();
+    this.client.normalCommands = new Discord.Collection();
 
     this.events();
     this.client.login();
