@@ -1,7 +1,7 @@
 import { yellow, gray } from "colors";
 import { ActivityType, Client } from "discord.js";
 
-import Deploy from '../Commands/BaseCommands'
+import BaseCommands from '../Commands/BaseCommands'
 
 export default class ReadyApplication {
   type: string;
@@ -17,7 +17,7 @@ export default class ReadyApplication {
       type: ActivityType.Playing
     })
 
-    new Deploy().PushCommand(client);
+    await BaseCommands(client);
 
     console.log(yellow("[CLIENT]") + " Aplicação " + gray(client.user.tag) + " Iniciada com Sucesso");
   };
